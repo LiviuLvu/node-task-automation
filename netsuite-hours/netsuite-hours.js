@@ -6,12 +6,12 @@ dotenv.config();
 (async () => {
   const browser = await puppeteer.launch({
     headless: false,
-    defaultViewport: { width: 1200, height: 500 }
+    defaultViewport: { width: 1200, height: 1200 }
   });
   const page = await browser.newPage();
   const keyboard = page.keyboard;
 
-  await page.goto(process.env.NS_TIMESHEET);
+  await page.goto(process.env.NS_TIMESHEET_PAGE);
 
   // login
   await page.type('input[name="email"]', process.env.NS_M);
@@ -20,15 +20,10 @@ dotenv.config();
 
   // answer security question
   await page.type('input[name="answer"]', process.env.NS_Q2);
-  await Promise.all([
-    page.waitForNavigation(),
-    page.click('input[name="submitter"]')
-  ]);
+  await page.click('input[name="submitter"]');
 
-  // go to weekly hours
-  await page.goto(process.env.NS_LINK);
-
-  // client
+  // fill boring forms after network indicates resources are loaded
+  await page.waitForNavigation({ waitUntil: "networkidle2" });
   await page.type("#timegrid_customer_display", process.env.CLIENT);
 
   // task
