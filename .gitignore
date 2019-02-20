@@ -10,7 +10,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Ignore local node environments
-.env.*.local
+.env*
 
 # WebStorm
 .idea/
