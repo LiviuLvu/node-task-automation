@@ -5,18 +5,34 @@ dotenv.config();
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false,
-    defaultViewport: { width: 1200, height: 1600 }
+    headless: false
   });
   const page = await browser.newPage();
-  const keyboard = page.keyboard;
 
-  await page.goto("https://www.myworkday.com/3pillar/d/task/2997$275.htmld");
+  await page.goto("https://www.myworkday.com/3pillar/d/home.htmld");
 
+  // login
   await page.type("input#Email", process.env.NS_M);
   await Promise.all([page.waitForNavigation(), page.click("input#next")]);
   await page.type("input#Passwd", process.env.MW_P);
   await Promise.all([page.waitForNavigation(), page.click("input#signIn")]);
+
+  await page.waitForNavigation({
+    waitUntil: ["domcontentloaded"]
+  });
+  await page.waitFor(".wd-applet.wd-applet-time-off");
+
+  // navigate
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click(".wd-applet.wd-applet-time-off")
+  ]);
+  await Promise.all([
+    page.waitForNavigation(),
+    page.click(
+      'div > div:first-child> [data-automation-id="workletQuandrant"] div[id*="wd-GroupedList-NO_METADATA_"] ul li:first-child '
+    )
+  ]);
 
   await page.waitForNavigation({ waitUntil: "load" });
   await page.waitFor("td.dayCell-today");
@@ -51,7 +67,4 @@ dotenv.config();
 
   await page.waitFor('[data-automation-id="radioBtn"]');
   await page.click('[data-automation-id="radioBtn"]');
-
-  // submit button
-  // await page.click('[data-automation-id="wd-CommandButton_934$20_BPF_Button_Bar"]');
 })();
