@@ -16,7 +16,7 @@ const addUsers = require("./fmc-add-users");
   await login(puppeteer, page);
 
   //"paula", "ana", "edi", "liviu", "sorin", "paul", "andreea", "ramona", "mihai", "mikyC", "mikyF", "mikyIE", "raduC", "raduF", "raduIE"
-  const users = ["c", "d", "e", "f"];
+  const users = ["d", "e", "f", "g"];
   for (let userName in users) {
     await addUsers(puppeteer, page, users[userName]);
     userName + 1 < users.length ? await page.waitForNavigation() : null;
