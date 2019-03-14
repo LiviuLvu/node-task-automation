@@ -14,13 +14,14 @@ const login = async (puppeteer, page) => {
     page.click("#login_button")
   ]);
 
-  // confirm login
+  // confirm login if prompted
   await Promise.all([
     page.waitForNavigation(),
     page.click(".buttons .primary")
   ]).then(
-    () => console.log`OK Navigate to theme page`,
-    () => console.log`ERROR on .buttons .primary`
+    () => console.log`OK confirm login`,
+    err => console.log`ERROR on confirm login >> 
+    ${err}`
   );
 };
 
